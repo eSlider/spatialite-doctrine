@@ -5,8 +5,8 @@ namespace WhereGroup\Spatialite;
  * Class Spatialite
  *
  * @author    Andriy Oblivantsev <eslider@gmail.com>
- * @see http://www.gaia-gis.it/gaia-sins/spatialite-cookbook/html/new-geom.html
- * @see http://www.gaia-gis.it/gaia-sins/splite-doxy-4.2.0/annotated.html
+ * @see       http://www.gaia-gis.it/gaia-sins/spatialite-cookbook/html/new-geom.html
+ * @see       http://www.gaia-gis.it/gaia-sins/splite-doxy-4.2.0/annotated.html
  */
 class NativeManager
 {
@@ -22,12 +22,18 @@ class NativeManager
     {
         $this->db = new \SQLite3($dbFile);
         # loading SpatiaLite as an extension
-        $this->db->loadExtension('mod_spatialite.so');
+        $isWindows = strpos( $_SERVER["OS"],"Windows") === 0;
+        $is64 = strpos($_SERVER["PROCESSOR_ARCHITECTURE"],"64") > 0;
+//        $libSrc    = 'bin/'.($isWindows?'win':'lin').'-'.($is64?'amd64':'x86').'/mod_spatialite'.($isWindows ? '.dll' : '.so');
+        $libSrc    = 'mod_spatialite';//($isWindows ? '.dll' : '.so');
+//        $libSrc = "C:\\Projects\\spatialite-doctrine\\bin\\win-amd64\\".$libSrc;
+//        $this->db->loadExtension($libSrc);
+        $this->db->exec("SELECT sqlite_version()"); //  load_extension('mod_spatialite'
         # enabling Spatial Metadata
         # using v.2.4.0 this automatically initializes SPATIAL_REF_SYS
 
         # and GEOMETRY_COLUMNS
-        $this->exec("SELECT InitSpatialMetadata()");
+//        $this->exec("SELECT InitSpatialMetadata()");
     }
 
     /**
@@ -92,10 +98,13 @@ class NativeManager
         proj4_version() as proj4,
         sqlite_version() as sqlite,
         spatialite_version() as spatilite,
-        spatialite_target_cpu() as targetCpu");
+        spatialite_target_cpu() as targetCpu"
+        );
     }
 
     /**
+     * Query SQL
+     *
      * @param $sql
      * @return bool
      */
@@ -160,7 +169,8 @@ class NativeManager
      * @param $wkt
      * @return null
      */
-    public function hexFromWkt($wkt){
+    public function hexFromWkt($wkt)
+    {
         return $this->fetchColumn("SELECT Hex(ST_GeomFromText('$wkt'))");
     }
 
@@ -168,7 +178,8 @@ class NativeManager
      * @param $wkt
      * @return null
      */
-    public function wkbFromWkt($wkt){
+    public function wkbFromWkt($wkt)
+    {
         return $this->fetchColumn("SELECT Hex(ST_AsBinary(ST_GeomFromText('$wkt')))");
     }
 
@@ -177,7 +188,8 @@ class NativeManager
      * @return null
      * @internal param $wkt
      */
-    public function wktFromWkb($wkb){
+    public function wktFromWkb($wkb)
+    {
         return $this->fetchColumn("SELECT ST_AsText(ST_GeomFromWKB(x'$wkb'));");
     }
 
@@ -186,7 +198,8 @@ class NativeManager
      * @internal param $wkt
      * @return null
      */
-    public function wktFromHex($wkb){
+    public function wktFromHex($wkb)
+    {
         return $this->fetchColumn("SELECT ST_AsText(x'$wkb')");
     }
 
@@ -218,7 +231,8 @@ class NativeManager
     /**
      * @param $wkb
      */
-    public function getSridFromWkb($wkb){
+    public function getSridFromWkb($wkb)
+    {
         $this->fetchColumn("SELECT ST_Srid('$wkb')");
 
     }

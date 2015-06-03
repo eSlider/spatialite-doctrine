@@ -1,6 +1,7 @@
 <?php
 namespace WhereGroup\Spatialite;
 
+use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\SqliteSchemaManager;
 
 /**
@@ -17,7 +18,7 @@ class SchemaManager extends SqliteSchemaManager
     public function createDatabase($database)
     {
         $options = array_merge($this->_conn->getParams(), array('path' => $database));
-        $conn    = \Doctrine\DBAL\DriverManager::getConnection($options);
+        $conn    = DriverManager::getConnection($options);
         $conn->connect();
         $conn->close();
     }

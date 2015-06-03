@@ -1,5 +1,5 @@
 <?php
-namespace WhereGroup\Spatilite;
+namespace WhereGroup\Spatialite;
 
 /**
  * Class SpatialiteDriver
