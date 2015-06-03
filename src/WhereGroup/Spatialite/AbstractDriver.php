@@ -1,5 +1,5 @@
 <?php
-namespace Spatilite\Drivers;
+namespace WhereGroup\Spatialite;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\AbstractSQLiteDriver;
