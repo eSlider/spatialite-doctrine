@@ -9,6 +9,21 @@ use WhereGroup\Spatialite\NativeManager;
 class SpatialiteDriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @group Doctrine driver
+     */
+    public function testExtendedSqliteDriver()
+    {
+        $config = new \Doctrine\DBAL\Configuration();
+        $conn = DriverManager::getConnection(array(
+            'path'        => 'data/spatialite.sqlite',
+            'driverClass' => 'WhereGroup\Spatialite\Driver'
+        ), $config
+        );
+        $var = $conn->exec("SELECT sqlite_version()");
+        return $var;
+    }
+
+    /**
      * @group native manager
      */
     public function nativeManager()
@@ -17,24 +32,7 @@ class SpatialiteDriverTest extends \PHPUnit_Framework_TestCase
         $cache = new NativeManager($dbSrc);
     }
 
-    /**
-     * @group Doctrine driver
-     */
-    public function testExtendedSqliteDriver()
-    {
-        $config = new \Doctrine\DBAL\Configuration();
-        $driver = new WhereGroup\Spatialite\Driver();
-        $driver;
-        $conn = DriverManager::getConnection(array(
-            'dbname' => 'mydb',
-            'driverClass' => 'WhereGroup\Spatialite\Driver'
-//            'driver' => 'pdo_sqlite',
-        ),$config);
-        $var = $conn->fetchColumn("SELECT sqlite_version()");
-        return $var;
-    }
-
-//
+    //
 //    public static function testGeo()
 //    {
 //        $db    = new NativeManager('../data/spatialite.sqlite');
