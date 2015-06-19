@@ -1,2 +1,2 @@
 # spatialite-doctrine
-Doctrine spatilite Driver
+Doctrine spatilite driver
