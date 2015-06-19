@@ -1,2 +1,2 @@
-# spatialite-doctrine
-Doctrine spatilite driver
+# Spatilite (sqlite) doctrine driver
+
