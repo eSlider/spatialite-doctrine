@@ -26,10 +26,14 @@ class Driver extends AbstractDriver
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
-        $this->conn    = new \SQLite3($params["path"]);
-        $extensionPath = isset($params['extensionPath']) ? $params['extensionPath'] : 'mod_spatialite.so';
+        return new Connection($params);
+    }
 
+    public function initSpatialite()
+    {
         # loading SpatiaLite as an extension
+        $this->conn->exec("SELECT load_extension('mod_spatialite')");
+        $extensionPath = isset($params['extensionPath']) ? $params['extensionPath'] : 'mod_spatialite.dll';
         $this->conn->loadExtension($extensionPath);
 
         # enabling Spatial Metadata
